@@ -1,0 +1,33 @@
+[开源协议介绍]
+http://www.oschina.net/question/54100_9455
+
+[LibSVM]
+[train_label, train_data] = libsvmread('heart_scale')
+model = svmtrain(train_label, train_data);
+[pre_label, accuracy, decision] = svmpredict(test_label, test_data, model);
+
+
+[github]
+git@github.com:cooljacket/Task.git
+
+echo # ActionLab >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/cooljacket/ActionLab.git
+git push -u origin master
+…or push an existing repository from the command line
+
+
+git remote add origin https://github.com/cooljacket/ActionLab.git
+git push -u origin master
+
+
+[.gitignore]
+# 此为注释 – 将被 Git 忽略 
+*.a # 忽略所有 .a 结尾的文件 
+!lib.a # 但 lib.a 除外 /
+TODO # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO 
+build/ # 忽略 build/ 目录下的所有文件 
+doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+
