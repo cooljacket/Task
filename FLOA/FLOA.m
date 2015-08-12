@@ -44,3 +44,4 @@ end
 	save('data/accuracy', 'accuracy');
 
 end
+% FLOA accuracy is: 56.074766%

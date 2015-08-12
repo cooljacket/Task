@@ -18,7 +18,7 @@ function PreData()
 
 	for i = 1 : size(content)
 		if content(i, 1) == video
-			data = [data; content(i, 4:end)];
+			data = [data; content(i, 4:end) / 1000];
 		else
 			fileName = sprintf('s%d_a%d_t%d', subject, action, time);
 			save([dirName, fileName], 'data');
