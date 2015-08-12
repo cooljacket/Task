@@ -9,15 +9,15 @@ load('skeleton_data/FLOA_ske/list');
 
 for subject_out = 1 : subject_num
 	dirName = sprintf('data/subject_out%d', subject_out);
-	% mkdir(dirName);
-	% dirName = [dirName, '/'];
-
-	% list_train_data = list(list(:, 1) ~= subject_out, :);
-	% [train_label, train_data] = ReadData(list_train_data);
-	% model = svmtrain(train_label, train_data, '-b 1');
-	% save([dirName, 'model'], 'model');
+	mkdir(dirName);
 	dirName = [dirName, '/'];
-	load([dirName, 'model']);
+
+	list_train_data = list(list(:, 1) ~= subject_out, :);
+	[train_label, train_data] = ReadData(list_train_data);
+	model = svmtrain(train_label, train_data, '-b 1');
+	save([dirName, 'model'], 'model');
+	% dirName = [dirName, '/'];
+	% load([dirName, 'model']);
 
 	list_test_data = list(list(:, 1) == subject_out, :);
 	testCase = size(list_test_data, 1);
@@ -28,7 +28,7 @@ for subject_out = 1 : subject_num
 		[~, ~, decision] = svmpredict(test_label, test_data, model, '-b 1');
 		[~, pre_label] = max(sum(decision));
 		prediction(action) = pre_label;
-		% list_test_data format is like: s1_a1_r2
+		% list_test_data format is like: s1_a1_t2
 		result(action) = ( pre_label == list_test_data(action, 2) );
 	end
 
@@ -40,8 +40,7 @@ for subject_out = 1 : subject_num
 end
 
 	accuracy = correct_num / test_num;
-	disp( sprintf('MSR accuracy is: %f%%\n', accuracy * 100) );
+	disp( sprintf('FLOA accuracy is: %f%%\n', accuracy * 100) );
 	save('data/accuracy', 'accuracy');
 
 end
-

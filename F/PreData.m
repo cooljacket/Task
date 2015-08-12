@@ -11,9 +11,10 @@ function PreData()
 
 	content = fscanf(fid, '%f');
 	content = reshape(content, 48, length(content) / 48)';	% 48 = 3 + 3(dimPerJoint) * 15(joints)
-	[video, subject] = deal([1], [1]);
-	[action, time, data] = deal([1], [1], []);
+	fclose(fid);
 	dirName = 'skeleton_data/FLOA_ske/';
+	[video, subject] = deal([1], [1]);
+	[action, time, data, list] = deal([1], [1], [], [1, 1, 1]);
 
 	for i = 1 : size(content)
 		if content(i, 1) == video
@@ -31,9 +32,12 @@ function PreData()
 				subject = content(i, 2);
 				action = content(i, 3);
 			end
+
+			list = [list; [subject, action, time]];
 		end
 
 	end
 
-	fclose(fid);
+	list = list(1:end-1, :);
+	save([dirName, 'list'], 'list');
 end
