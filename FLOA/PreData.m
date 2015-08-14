@@ -1,7 +1,22 @@
 function PreData()
-% To: prepare the list_train_data and list_test_data for the MSR.m to use
-% In MSR Action3D Dataset, subject 1,3,5,7,9 is for training while 2,4,6,8,10 is for testing
-% By Jacket, 08/11/2015
+% To: deal with thr raw data in Florence_dataset_WorldCoordinates.txt, divide each coordinat by 1000
+% each dimension in the data matrix is like following:
+% Head: f1-f3
+% Neck: f4-f6
+% Spine: f7-f9
+% Left Shoulder: f10-f12
+% Left Elbow: f13-f15
+% Left Wrist: f16-f18
+% Right Shoulder: f19-f21
+% Right Elbow: f22-f24
+% Right Wrist: f25-f27
+% Left Hip: f28-f30
+% Left Knee: f31-f33
+% Left Ankle: f34-f36
+% Right Hip: f37-f39
+% Right Knee: f40-f42
+% Right Ankle: f43-f45 
+% By Jacket, 08/13/2015
 	
 	fileName = 'skeleton_data/Florence_dataset_WorldCoordinates.txt';
 	fid = fopen(fileName, 'r');

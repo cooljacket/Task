@@ -10,16 +10,16 @@ model = svmtrain(train_label, train_data);
 [github]
 git@github.com:cooljacket/Task.git
 
-echo # ActionLab >> README.md
+echo # Task >> README.md
 git init
 git add README.md
 git commit -m "first commit"
-git remote add origin https://github.com/cooljacket/ActionLab.git
+git remote add origin https://github.com/cooljacket/Task.git
 git push -u origin master
 …or push an existing repository from the command line
 
 
-git remote add origin https://github.com/cooljacket/ActionLab.git
+git remote add origin https://github.com/cooljacket/Task.git
 git push -u origin master
 
 

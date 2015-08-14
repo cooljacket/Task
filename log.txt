@@ -1,3 +1,33 @@
 [FLOA官网下载地址]
 http://www.micc.unifi.it/vim/datasets/3dactions/
 
+[FLOA问题得以解决] 08/13/2015
+发现FLOA的数据集的坐标单位应该是毫米的，数值太大了，SVM对距离是非常敏感的，导致准确率奇低，几乎全部都分成第九个动作（bow）了。
+然后除以1000换算成与其他数据集一样，以米为单位，准确率就提高了——The SVM accuracy is: 79.534884%
+中间要注意更新一下aver文件：
+Data_set = 5;
+J =[3   3  3   2  2  2  4  5  7  8  10  11  13  14;
+        10  2  13  1  7  4  5  6  8  9  11  12  14  15];
+aver = average_limbs(Data_set, J);
+save('aver', 'aver');
+
+
+Data_set = 2;
+J = [1  1  1  2  3  4  5 5 5  6  8 9  10 11 12 12 15 16 17 18 19 19 22 23 24 25 26 27 29 30 31 32 33 34 
+     2  22 29 3  4  5  6 8 15 7  9 10 11 12 13 14 16 17 18 19 20 21 23 24 25 26 27 28 30 31 32 33 34 35];
+aver = average_limbs(Data_set, J);
+save('aver', 'aver');
+
+
+[Grid search for the best parameters, but introduce a new problem, overfit, although with cross-validation]
+python grid.py -log2c -5,15,1 -log2g -15,3,1 -v 5 MSR.svm
+python grid.py -log2c -5,15,1 -log2g -15,3,1 -v 5 UTK.svm
+python grid.py -log2c -5,15,1 -log2g -15,3,1 -v 5 MHAD.svm
+python grid.py -log2c -5,15,1 -log2g -15,3,1 -v 5 FLOA.svm
+python grid.py -log2c -5,15,1 -log2g -15,3,1 -v 5 UTK_remove11Label.svm
+
+
+MSR		32.0, 0.0625
+UTK		32.0, 0.0625
+FLOA 	89.767442% (-c 256.0 -g 0.015625)		91.162791% (-c 32.0 -g 0.0625)		91.162791% (-c 16.0 -g 0.0625)
+MHAD	8.0, 0.25

@@ -14,8 +14,10 @@ function [accuracy] = UTK_NKSVM(refreshDataOrNot)
 		train_data = Get_data(list_train_data, t, Data_set, aver, act_label);
 
 		% I remove the redundant frames with label 11
-		train_data = train_data(train_data(:, 1) <= action_num, :);
-		model = svmtrain(train_data(:, 1), train_data(:, 2:end), '-b 1');
+		% train_data = train_data(train_data(:, 1) <= action_num, :);
+
+		svm_options = '-c 256.0 -g 0.015625 -b 1';
+		model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
 		save('data/model', 'model');
 		save('data/train_data', 'train_data');
 	else
@@ -42,12 +44,20 @@ function [accuracy] = UTK_NKSVM(refreshDataOrNot)
 	end
 
 	accuracy = sum(result) / (testCase * action_num);
-	disp(sprintf('The SVM accuracy is: %f%%\n', accuracy*100) );
+	disp(sprintf('The SVM accuracy is: %f%% (with svm options: %s)\n', accuracy * 100, svm_options) );
 	save('data/prediction', 'prediction');
 	save('data/result', 'result');
 	save('data/accuracy', 'accuracy');
 
 end
 
+% with the 11th label
 % The SVM accuracy is: 20.000000% (train_data with the extra label 11)
-% The SVM accuracy is: 64.000000% (remove the 11 label from train_data)
+% The SVM accuracy is: 20.000000% (with svm options: -c 256.0 -g 0.015625 -b 1)
+
+% =======================================================
+
+% remove the 11th label
+% The SVM accuracy is: 64.000000% (remove the 11 label from train_data) with default settings
+% The SVM accuracy is: 61.000000% (with svm options: -c 16.0 -g 0.015625 -b 1)
+% Finished
