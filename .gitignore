@@ -1,3 +1,4 @@
 skeleton_data/
 data/
-!FLOA/skeleton/data/*.txt
+!FLOA/skeleton_data/*.txt
+!UTK/skeleton_data/*.txt

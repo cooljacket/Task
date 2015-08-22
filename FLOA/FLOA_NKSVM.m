@@ -1,26 +1,26 @@
-function [accuracy] = FLOA_NKSVM()
-	% usage: [accuracy] = FLOA_NKSVM(refreshDataOrNot)
-	% refreshDataOrNot = 0, use the saved data while 1 means to calculate again
+function [accuracy] = FLOA_NKSVM(svm_options)
+	% usage: [accuracy] = FLOA_NKSVM(svm_options)
 	% by Jacket, 2015/8/7
 
 	Data_set = 5;
 	t = 7;
-	%action_num = 9;
+	action_num = 9;
 	subject_num = 10;
 	load('skeleton_data/FLOA_ske/list');
 	load('data/aver');
 	numOfFrames = 0;
 	correctCase = 0;
 
+	% follow one-subject-out method to do cross-validation
 	for subject = 1 : subject_num
 		dirName = sprintf('data/subject%d', subject);	% s_a_e
 		mkdir(dirName);
 		list_train_data = list(list(:, 1) ~= subject, :);
 		train_data = Get_data(list_train_data, t, Data_set, aver);
 
-		svm_options = '-c 16.0 -g 0.0625 -b 1';
+		% svm_options = '-c 16.0 -g 0.0625 -b 1';
 		model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
-		save([dirName '/model.mat'], 'model');
+		save([dirName '/model'], 'model');
 		save([dirName, '/train_data'], 'train_data');
 		
 		list_test_data = list(list(:, 1) == subject, :);

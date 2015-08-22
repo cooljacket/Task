@@ -1,23 +1,23 @@
-function [accuracy] = MHAD_NKSVM(refreshDataOrNot)
-% usage: [accuracy] = MHAD_NKSVM(refreshDataOrNot)
-% refreshDataOrNot = 0, use the saved data while 1 means to calculate again
-% by Jacket, 2015/8/7
+function [accuracy] = MHAD_NKSVM(svm_options)
+	% by Jacket, 2015/8/7
 
 	Data_set = 2;
 	t = 7;
 	action_num = 11;
 	load('data/aver');
 	
-	if refreshDataOrNot
+	if exist('data/train_data', 'file')
+		load('data/train_data');
+	else
 		load('data/list_train_data');
 		train_data = Get_data(list_train_data, t, Data_set, aver);
-
-		svm_options = '-c 2048.0 -g 0.015625 -b 1';
-		model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
-		save('data/model', 'model');
-	else
-		load('data/model');
+		save('data/train_data', 'train_data');
 	end
+	
+	% svm_options = '-c 2048.0 -g 0.015625 -b 1';
+	model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
+	save('data/model', 'model');
+	save('data/train_data', 'train_data');
 
 	load('data/list_test_data');
 	testCase = size(list_test_data, 1);

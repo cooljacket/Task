@@ -1,6 +1,4 @@
-function [accuracy] = UTK_NKSVM(refreshDataOrNot)
-	% usage: [accuracy] = UTK_NKSVM(refreshDataOrNot)
-	% refreshDataOrNot = 0, use the saved data while 1 means to calculate again
+function [accuracy] = UTK_NKSVM(svm_options)
 	% by Jacket, 2015/8/7
 
 	Data_set = 3;
@@ -8,21 +6,22 @@ function [accuracy] = UTK_NKSVM(refreshDataOrNot)
 	action_num = 10;
 	load('data/aver');
 	load('data/act_label');
-
-	if refreshDataOrNot
+	
+	if exist('data/train_data', 'file')
+		load('data/train_data');
+	else
 		load('data/list_train_data');
 		train_data = Get_data(list_train_data, t, Data_set, aver, act_label);
-
-		% I remove the redundant frames with label 11
-		% train_data = train_data(train_data(:, 1) <= action_num, :);
-
-		svm_options = '-c 256.0 -g 0.015625 -b 1';
-		model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
-		save('data/model', 'model');
 		save('data/train_data', 'train_data');
-	else
-		load('data/model');
 	end
+	
+	% I remove the redundant frames with label 11
+	train_data = train_data(train_data(:, 1) <= action_num, :);
+	% svm_options = '-c 64.0 -g 0.015625 -b 1';
+	svm_options = '-b 1';
+	model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
+	save('data/model', 'model');
+	
 
 	load('data/list_test_data');
 	testCase = size(list_test_data, 1);
@@ -30,7 +29,7 @@ function [accuracy] = UTK_NKSVM(refreshDataOrNot)
 	prediction = [];
 	for i = 1 : testCase
 		test_data = Get_data(list_test_data(i, :), t, Data_set, aver, act_label);
-		% Everytime read one action sequence file, each file contains all the 10 actions
+		% Everytime read one action sequence file, each file contains the whole 10 actions
 		% The format of files is like: joints_s01_e01.txt, where s stands for subject
 		% Each subject plays the same action for 2 times, use e to indicate this
 		for action = 1 : action_num

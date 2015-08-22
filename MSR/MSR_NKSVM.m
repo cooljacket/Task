@@ -1,6 +1,5 @@
-function [accuracy] = MSR_NKSVM(refreshDataOrNot)
+function [accuracy] = MSR_NKSVM(svm_options)
 	% usage: [accuracy] = MSR_NKSVM(refreshDataOrNot)
-	% refreshDataOrNot = 0, use the saved data while 1 means to calculate again
 	% by Jacket, 2015/8/7
 
 	Data_set = 1;
@@ -8,16 +7,19 @@ function [accuracy] = MSR_NKSVM(refreshDataOrNot)
 	action_num = 20;
 	load('data/aver');
 
-	if refreshDataOrNot
+	if exist('data/train_data', 'file')
+		load('data/train_data');
+	else
 		load('data/list_train_data');
 		train_data = Get_data(list_train_data, t, Data_set, aver);
-		svm_options = '-c 256.0 -g 0.015625 -b 1';
-		model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
 		save('data/train_data', 'train_data');
-		save('data/model', 'model');
-	else
-		load('data/model');
 	end
+
+	% svm_options = '-c 256.0 -g 0.015625 -b 1';
+	model = svmtrain(train_data(:, 1), train_data(:, 2:end), svm_options);
+	save('data/train_data', 'train_data');
+	save('data/model', 'model');
+
 
 	load('data/list_test_data');
 	testCase = size(list_test_data, 1);
